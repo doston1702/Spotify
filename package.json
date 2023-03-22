@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "json-server": "^0.17.2"
+  },
+  "scripts": {
+    "server": "json-server -w server/db.json -p 3300"
+  }
+}

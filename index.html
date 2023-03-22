@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="./Fonts/CircularStd/stylesheet.css" />
+    <link rel="stylesheet" href="./Fonts/Gilroy/stylesheet.css" />
+    <link rel="stylesheet" href="./CSS/style.css" />
+    <link rel="stylesheet" href="./CSS/media.css" />
+    <link rel="icon" href="./Images/page-logo.png" />
+    <title>Spotify</title>
+  </head>
+  <body>
+    <aside class="aside-onleft">
+      <div class="aside-top">
+        <div class="aside-logo">
+          <img src="./Images/logo.svg" class="logo" />
+          <img src="./Images/arrow.png" class="arrow" />
+        </div>
+        <div class="menu-zone">
+          <label class="menu-box">
+            <input type="radio" name="menu_radio" class="menu-radio" checked />
+            <img src="./Images/home-fill.png" />
+            <h2 class="aside-text">Home</h2>
+          </label>
+          <label class="menu-box">
+            <input type="radio" name="menu_radio" class="menu-radio" />
+            <img src="./Images/search.png" />
+            <h2 class="aside-text">Search</h2>
+          </label>
+          <label class="menu-box">
+            <input type="radio" name="menu_radio" class="menu-radio" />
+            <img src="./Images/library.png" />
+            <h2 class="aside-text">Your Library</h2>
+          </label>
+        </div>
+        <div class="create-box">
+          <div class="creater">
+            <img src="./Images/create.png" />
+            <h2 class="aside-text">Create Playlist</h2>
+          </div>
+          <div class="creater">
+            <img src="./Images/liked-songs.png" />
+            <h2 class="aside-text">Liked Songs</h2>
+          </div>
+        </div>
+        <hr class="line" />
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide mySlide">
+              <div class="playlists-wrap"></div>
+            </div>
+          </div>
+          <div class="swiper-scrollbar"></div>
+        </div>
+      </div>
+      <a href="./Spotify.rar" download class="download-btn">Download app</a>
+    </aside>
+    <aside class="aside-onright">
+      <div class="friend-top">
+        <h2 class="friends-title">Friend Activity</h2>
+        <div class="friend-icons">
+          <img src="./Images/add-friend.png" class="add-friend" />
+          <img src="./Images/close.png" class="close" />
+        </div>
+      </div>
+      <p class="friend-text">
+        Let friends and followers on Spotify see what you’re listening to.
+      </p>
+      <div class="swiper mySwiper2">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="messages-wrap">
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+              <div class="message">
+                <img src="./Images/user-message.png" />
+                <div class="mess-box">
+                  <div class="mess-long"></div>
+                  <div class="mess-norm"></div>
+                  <div class="mess-norm"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-scrollbar"></div>
+      </div>
+      <p class="friend-text">
+        Go to Settings > Social and enable “Share my listening activity on
+        Spotify.’’ You can turn this off at any time.
+      </p>
+      <button class="settings-btn">SETTINGS</button>
+    </aside>
+    <main>
+      <!-- Модальные окна зарегистрироваться и войти -->
+      <div class="signup hide">
+        <div class="signup-content">
+          <h2 class="signup-title">Sign up</h2>
+          <form class="signup-inp-wrap">
+            <input type="text" class="signup-inp image-inp" placeholder="Image URL">
+            <input type="text" class="signup-inp signup-name" placeholder="Username" required>
+            <input type="password" class="signup-inp signup-password" placeholder="Password" required minlength="5">
+            <input type="email" class="signup-inp signup-email" placeholder="E-mail" required>
+            <button type="submit" class="signup-send">Send</button>
+          </form>
+        </div>
+      </div>
+      <div class="signup hide">
+        <div class="signup-content">
+          <h2 class="signup-title">Log in</h2>
+          <form class="signup-inp-wrap">
+            <input type="text" class="signup-inp image-inp" placeholder="Image URL">
+            <input type="text" class="signup-inp signup-name" placeholder="Username" required>
+            <input type="password" class="signup-inp signup-password" placeholder="Password" required minlength="5">
+            <input type="email" class="signup-inp signup-email" placeholder="E-mail" required>
+            <button type="submit" class="signup-send">Send</button>
+          </form>
+        </div>
+      </div>
+      <!-- Header -->
+      <header>
+        <div class="header-icons">
+          <img src="./Images/to-left.png" class="left-arrow" />
+          <img src="./Images/to-right.png" class="right-arrow" />
+        </div>
+        <div class="btn-wrapper">
+          <button class="signup-btn">Sign up</button>
+          <button class="login-btn">Log in</button>
+        </div>
+        <div class="user-account hide">
+          <img src="./Images/profile-icon.png" class="profile-icon" />
+          <p class="profile-name">You</p>
+          <img src="./Images/bottom-arrow.png" class="bottom-arrow" />
+          <div class="user-menu user-menu-1 hide">
+            <div class="u-item">
+              <p class="u-text">Account</p>
+              <img src="./Images/bottom-arrow.png" class="u-arrow" />
+            </div>
+            <div class="u-item">
+              <p class="u-text">Profile</p>
+            </div>
+            <div class="u-item">
+              <p class="u-text">Private session</p>
+            </div>
+            <div class="u-item">
+              <p class="u-text">Settings</p>
+            </div>
+            <hr class="u-line" />
+            <div class="u-item">
+              <p class="u-text">Log out</p>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Основной контент -->
+      <div class="main-content">
+        <h1 class="main-title"></h1>
+        <div class="mixes-wrap"></div>
+        <!-- Your top mixes -->
+        <div class="title-top">
+          <h2 class="second-title">Your top mixes</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-1"></div>
+        <!-- Made for you -->
+        <div class="title-top">
+          <h2 class="second-title">Made for you</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-2"></div>
+        <!-- Recently played -->
+        <div class="title-top">
+          <h2 class="second-title">Recently played</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-3"></div>
+        <!-- Jump back in -->
+        <div class="title-top">
+          <h2 class="second-title">Jump back in</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-4"></div>
+        <!-- Uniquely yours -->
+        <div class="title-top">
+          <h2 class="second-title">Uniquely yours</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-5"></div>
+        <!-- Just the hits -->
+        <div class="title-top">
+          <h2 class="second-title">Just the hits</h2>
+          <a class="see-all">SEE ALL</a>
+        </div>
+        <div class="play-wrap wrap-6"></div>
+      </div>
+      <!-- Страница для плейлистов -->
+      <div class="playlist-section hide">
+        <div class="playlist-top">
+          <img src="" class="playlist-image" />
+          <div class="playlist-info">
+            <p class="playlist-type"></p>
+            <h1 class="playlist-name"></h1>
+            <p class="playlist-artists"></p>
+            <div class="more-info">
+              <span class="user-remind"></span>
+              <span class="dot"></span>
+              <span class="songs-time"></span>
+            </div>
+          </div>
+        </div>
+        <div class="playlist-bottom">
+          <div class="playlist-icons">
+            <div class="left-icons">
+              <input type="checkbox" class="playlist-inp" />
+              <input type="checkbox" class="playlist-heart" />
+              <a download>
+                <img src="./Images/load-song.png" class="load-icon" />
+              </a>
+              <div class="playlist-menu">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <div class="right-icons">
+              <input
+                type="search"
+                class="search-inp no-width"
+                placeholder="Artists, songs or albums..."
+              />
+              <img src="./Images/search-icon.png" class="playlist-search" />
+              <div class="search-order">
+                <p class="order-type">Custom order</p>
+                <img src="./Images/bottom-arrow.png" class="order-arrow" />
+              </div>
+            </div>
+          </div>
+          <table class="playlist-table">
+            <thead class="table-head">
+              <tr>
+                <th class="head-th hashtag">#</th>
+                <th class="head-th">TITLE</th>
+                <th class="head-th">ALBUM</th>
+                <th class="head-th">DATE ADDED</th>
+                <th class="head-th null-th"></th>
+                <th class="head-th clock-th">
+                  <img src="./Images/clock.png" class="clock" />
+                </th>
+                <th class="head-th"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Задний слой -->
+      <div class="main-layer"></div>
+      <!-- Аудиоплеер -->
+      <div class="audio-player">
+        <div class="player-left">
+          <div class="big-img">
+            <div class="big-img-layer">
+              <img class="song-pic" />
+              <img src="./Images/forward.png" class="forward" />
+            </div>
+          </div>
+          <div class="song-cont">
+            <p class="song-name"><a>Name</a></p>
+            <p class="song-author"><a>Artist</a></p>
+          </div>
+          <img src="./Images/heart.png" class="heart" />
+        </div>
+        <div class="player-center">
+          <div class="player-icons">
+            <img src="./Images/mix.svg" class="icon mix" />
+            <img src="./Images/prev.svg" class="icon prev" />
+            <img src="./Images/play.png" class="play-icon" />
+            <img src="./Images/next.svg" class="icon next" />
+            <img src="./Images/cycle.svg" class="icon cycle" />
+          </div>
+          <audio id="audio"></audio>
+          <div class="player-music">
+            <p class="time">0:00</p>
+            <div class="for-range">
+              <div class="filled"></div>
+              <input
+                type="range"
+                class="fill-bar"
+                min="0"
+                max="1000"
+                value="0"
+                step="1"
+              />
+            </div>
+            <p class="dur">0:00</p>
+          </div>
+        </div>
+        <div class="player-right">
+          <img src="Images/queue.png" class="vol-icon" />
+          <img src="./Images/gadget.png" class="vol-icon" />
+          <img src="./Images/volume.png" class="vol-icon" />
+          <div class="volume-bar">
+            <div class="vol-fill"></div>
+            <input
+              type="range"
+              class="vol-bar-fill"
+              min="0"
+              max="100"
+              value="100"
+              step="1"
+            />
+          </div>
+          <img src="./Images/bigscreen.png" class="bigscreen" />
+        </div>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./JS/script.js"></script>
+  </body>
+</html>
