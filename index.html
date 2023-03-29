@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
     />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="./Fonts/CircularStd/stylesheet.css" />
     <link rel="stylesheet" href="./Fonts/Gilroy/stylesheet.css" />
     <link rel="stylesheet" href="./CSS/style.css" />
@@ -23,12 +24,12 @@
           <img src="./Images/arrow.png" class="arrow" />
         </div>
         <div class="menu-zone">
-          <label class="menu-box">
+          <label class="menu-box homepage">
             <input type="radio" name="menu_radio" class="menu-radio" checked />
             <img src="./Images/home-fill.png" />
             <h2 class="aside-text">Home</h2>
           </label>
-          <label class="menu-box">
+          <label class="menu-box search-tap">
             <input type="radio" name="menu_radio" class="menu-radio" />
             <img src="./Images/search.png" />
             <h2 class="aside-text">Search</h2>
@@ -136,28 +137,105 @@
       <button class="settings-btn">SETTINGS</button>
     </aside>
     <main>
-      <!-- Модальные окна зарегистрироваться и войти -->
-      <div class="signup hide">
+      <!-- Заставка -->
+      <div class="video-wrap">
+        <video id="video" autoplay muted></video>
+      </div>
+      <!-- Модальное окно зарегистрироваться -->
+      <div class="signup hide" title="&#171;Esc&#187; to close">
         <div class="signup-content">
           <h2 class="signup-title">Sign up</h2>
+          <img src="./Images/profile-icon.png" class="preview-img" />
           <form class="signup-inp-wrap">
-            <input type="text" class="signup-inp image-inp" placeholder="Image URL">
-            <input type="text" class="signup-inp signup-name" placeholder="Username" required>
-            <input type="password" class="signup-inp signup-password" placeholder="Password" required minlength="5">
-            <input type="email" class="signup-inp signup-email" placeholder="E-mail" required>
+            <label class="signup-inp">
+              <span>Upload image</span>
+              <input type="file" class="file-inp hide" accept="image/*" />
+            </label>
+            <input
+              type="text"
+              class="signup-inp signup-name"
+              placeholder="Username"
+              required
+            />
+            <input
+              type="password"
+              class="signup-inp signup-password"
+              placeholder="Password"
+              required
+              minlength="5"
+              maxlength="18"
+            />
+            <input
+              type="email"
+              class="signup-inp signup-email"
+              placeholder="E-mail"
+              required
+            />
             <button type="submit" class="signup-send">Send</button>
           </form>
         </div>
       </div>
-      <div class="signup hide">
+      <!-- Модальное окно войти -->
+      <div class="signup hide" title="&#171;Esc&#187; to close">
         <div class="signup-content">
           <h2 class="signup-title">Log in</h2>
           <form class="signup-inp-wrap">
-            <input type="text" class="signup-inp image-inp" placeholder="Image URL">
-            <input type="text" class="signup-inp signup-name" placeholder="Username" required>
-            <input type="password" class="signup-inp signup-password" placeholder="Password" required minlength="5">
-            <input type="email" class="signup-inp signup-email" placeholder="E-mail" required>
+            <input
+              type="text"
+              class="signup-inp signup-name"
+              placeholder="Username"
+              required
+            />
+            <input
+              type="password"
+              class="signup-inp signup-password"
+              placeholder="Password"
+              required
+              minlength="5"
+              maxlength="18"
+            />
             <button type="submit" class="signup-send">Send</button>
+          </form>
+        </div>
+      </div>
+      <!-- Модально окно удаления и изменения аккаунта -->
+      <div class="signup hide" title="&#171;Esc&#187; to close">
+        <div class="signup-content">
+          <h2 class="signup-title">Profile</h2>
+          <img src="./Images/profile-icon.png" class="preview-img" />
+          <form class="signup-inp-wrap">
+            <label class="signup-inp">
+              <span>Update image</span>
+              <input type="file" class="file-inp hide" accept="image/*" />
+            </label>
+            <input
+              type="text"
+              class="signup-inp signup-name"
+              placeholder="Username"
+              required
+            />
+            <input
+              type="text"
+              class="signup-inp signup-pass"
+              placeholder="Password"
+              required
+              minlength="5"
+              maxlength="18"
+            />
+            <input
+              type="email"
+              class="signup-inp signup-email"
+              placeholder="E-mail"
+              required
+            />
+            <div class="profile-btn-wrapper">
+              <button type="submit" class="signup-send save-btn">
+                Save changes
+              </button>
+              <button type="button" class="signup-send delete-btn">
+                Delete account
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -166,6 +244,14 @@
         <div class="header-icons">
           <img src="./Images/to-left.png" class="left-arrow" />
           <img src="./Images/to-right.png" class="right-arrow" />
+          <div class="main-search hide">
+            <img src="./Images/search.png" class="main-search-icon" />
+            <input
+              type="search"
+              class="main-search-inp"
+              placeholder="Artists, songs, or podcasts"
+            />
+          </div>
         </div>
         <div class="btn-wrapper">
           <button class="signup-btn">Sign up</button>
@@ -180,7 +266,7 @@
               <p class="u-text">Account</p>
               <img src="./Images/bottom-arrow.png" class="u-arrow" />
             </div>
-            <div class="u-item">
+            <div class="u-item profile-btn">
               <p class="u-text">Profile</p>
             </div>
             <div class="u-item">
@@ -190,7 +276,7 @@
               <p class="u-text">Settings</p>
             </div>
             <hr class="u-line" />
-            <div class="u-item">
+            <div class="u-item logout-btn">
               <p class="u-text">Log out</p>
             </div>
           </div>
@@ -297,67 +383,119 @@
           </table>
         </div>
       </div>
+      <!-- Страница для поиска -->
+      <div class="search-section hide">
+        <div class="search-result hide">
+          <!-- <div class="best-result">
+            <h2 class="best-result-title">Best result</h2>
+            <div class="best-result-item">
+              <img class="best-result-img" />
+              <h2 class="best-result-name">NAME</h2>
+              <p class="best-result-type">TYPE</p>
+            </div>
+            <input
+              type="radio"
+              name="playgreen"
+              class="best-result-playgreen"
+            />
+          </div> -->
+          <div class="track-result">
+            <div class="title-top">
+              <h2 class="second-title">Tracks</h2>
+              <a class="see-all">SEE ALL</a>
+            </div>
+            <div class="play-wrap"></div>
+          </div>
+          <div class="playlist-result">
+            <div class="title-top">
+              <h2 class="second-title">Playlists</h2>
+              <a class="see-all">SEE ALL</a>
+            </div>
+            <div class="play-wrap"></div>
+          </div>
+          <div class="album-result">
+            <div class="title-top">
+              <h2 class="second-title">Albums</h2>
+              <a class="see-all">SEE ALL</a>
+            </div>
+            <div class="play-wrap"></div>
+          </div>
+          <div class="artist-result">
+            <div class="title-top">
+              <h2 class="second-title">Artists</h2>
+              <a class="see-all">SEE ALL</a>
+            </div>
+            <div class="play-wrap"></div>
+          </div>
+        </div>
+        <div class="browse-search">
+          <h2 class="browse-title">Browse all</h2>
+          <div class="browse-wrap"></div>
+        </div>
+      </div>
       <!-- Задний слой -->
       <div class="main-layer"></div>
-      <!-- Аудиоплеер -->
-      <div class="audio-player">
-        <div class="player-left">
-          <div class="big-img">
-            <div class="big-img-layer">
-              <img class="song-pic" />
-              <img src="./Images/forward.png" class="forward" />
-            </div>
-          </div>
-          <div class="song-cont">
-            <p class="song-name"><a>Name</a></p>
-            <p class="song-author"><a>Artist</a></p>
-          </div>
-          <img src="./Images/heart.png" class="heart" />
-        </div>
-        <div class="player-center">
-          <div class="player-icons">
-            <img src="./Images/mix.svg" class="icon mix" />
-            <img src="./Images/prev.svg" class="icon prev" />
-            <img src="./Images/play.png" class="play-icon" />
-            <img src="./Images/next.svg" class="icon next" />
-            <img src="./Images/cycle.svg" class="icon cycle" />
-          </div>
-          <audio id="audio"></audio>
-          <div class="player-music">
-            <p class="time">0:00</p>
-            <div class="for-range">
-              <div class="filled"></div>
-              <input
-                type="range"
-                class="fill-bar"
-                min="0"
-                max="1000"
-                value="0"
-                step="1"
-              />
-            </div>
-            <p class="dur">0:00</p>
+    </main>
+    <!-- Аудиоплеер -->
+    <div class="audio-player">
+      <div class="player-left">
+        <div class="big-img">
+          <div class="big-img-layer">
+            <img class="song-pic" />
+            <img src="./Images/forward.png" class="forward" />
           </div>
         </div>
-        <div class="player-right">
-          <img src="Images/queue.png" class="vol-icon" />
-          <img src="./Images/gadget.png" class="vol-icon" />
-          <img src="./Images/volume.png" class="vol-icon" />
-          <div class="volume-bar">
-            <div class="vol-fill"></div>
+        <div class="song-cont">
+          <p class="song-name"><a>Name</a></p>
+          <p class="song-author"><a>Artist</a></p>
+        </div>
+        <img src="./Images/heart.png" class="heart" />
+      </div>
+      <div class="player-center">
+        <div class="player-icons">
+          <img src="./Images/mix.svg" class="icon mix" />
+          <img src="./Images/prev.svg" class="icon prev" />
+          <img src="./Images/play.png" class="play-icon" />
+          <img src="./Images/next.svg" class="icon next" />
+          <img src="./Images/cycle.svg" class="icon cycle" />
+        </div>
+        <audio id="audio"></audio>
+        <div class="player-music">
+          <p class="time">0:00</p>
+          <div class="for-range">
+            <div class="filled"></div>
             <input
               type="range"
-              class="vol-bar-fill"
+              class="fill-bar"
               min="0"
-              max="100"
-              value="100"
+              max="1000"
+              value="0"
               step="1"
             />
           </div>
-          <img src="./Images/bigscreen.png" class="bigscreen" />
+          <p class="dur">0:00</p>
         </div>
       </div>
-    </main>
+      <div class="player-right">
+        <img src="Images/queue.png" class="vol-icon" />
+        <img src="./Images/gadget.png" class="vol-icon" />
+        <img src="./Images/volume.png" class="vol-icon" />
+        <div class="volume-bar">
+          <div class="vol-fill"></div>
+          <input
+            type="range"
+            class="vol-bar-fill"
+            min="0"
+            max="100"
+            value="100"
+            step="1"
+          />
+        </div>
+        <img src="./Images/bigscreen.png" class="bigscreen" />
+      </div>
+    </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./JS/script.js"></script>

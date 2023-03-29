@@ -12,8 +12,8 @@ let clientSecretTokens = [
   "e9f4a9a3eba848ad974b38a0e252523a",
 ];
 
-const clientId = clientIdTokens[2];
-const clientSecret = clientSecretTokens[2];
+const clientId = clientIdTokens[0];
+const clientSecret = clientSecretTokens[0];
 
 const getToken = async () => {
   const result = await fetch("https://accounts.spotify.com/api/token", {
@@ -37,6 +37,16 @@ let dragAllower = () => {
   }
 };
 setInterval(dragAllower);
+
+// Уникальная функция для проверки: есть ли в массиве элемент?
+function contains(arr, elem) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === elem) {
+      return true;
+    }
+  }
+  return false;
+}
 
 // Стилизация тега audio
 let audio = doc.querySelector("#audio");
@@ -147,6 +157,33 @@ setInterval(() => {
   if (audio.src == "") {
     trackInfo.style.opacity = 0;
   } else trackInfo.style.opacity = 1;
+});
+
+// Анимация при заходе на сайт
+let video = doc.querySelector("#video");
+let videoArr = [
+  "./Videos/animation-1.mp4",
+  "./Videos/animation-2.mp4",
+  "./Videos/animation-3.mp4",
+];
+let videoRandom = Math.floor(Math.random() * videoArr.length);
+video.setAttribute("src", videoArr[videoRandom]);
+
+video.addEventListener("ended", function () {
+  video.parentElement.style.opacity = 0;
+
+  doc.querySelector(".audio-player").style.animation = `player ${1}s`;
+  doc.querySelector(".aside-onleft").style.animation = `left_aside ${1}s`;
+  doc.querySelector(".aside-onright").style.animation = `right_aside ${1}s`;
+  doc.querySelector("main").style.animation = `main ${1}s`;
+
+  setTimeout(() => {
+    video.parentElement.remove();
+  }, 300);
+});
+
+video.parentElement.addEventListener("contextmenu", function (event) {
+  event.preventDefault();
 });
 
 // Функция любимые треки
@@ -431,50 +468,11 @@ let arrowFunc = () => {
 };
 arrow.addEventListener("click", arrowFunc);
 
-// Вытаскиваем текущее время и говорим Доброе утро, день и тд.
-let main_title = doc.querySelector(".main-title");
-let date = new Date();
-let currentHours = date.getHours();
-
-if (currentHours <= 6) {
-  main_title.innerHTML = "Good night";
-} else if (currentHours <= 12 && currentHours > 6) {
-  main_title.innerHTML = "Good morning";
-} else if (currentHours <= 18 && currentHours > 12) {
-  main_title.innerHTML = "Good afternoon";
-} else if (currentHours <= 24 && currentHours > 18) {
-  main_title.innerHTML = "Good evening";
-}
-
-// Меню аккаунта
-let user_acc = doc.querySelector(".user-account");
-let user_menu1 = doc.querySelector(".user-menu-1");
-
-user_acc.addEventListener("click", function () {
-  user_menu1.classList.toggle("hide");
-});
-user_menu1.addEventListener("click", function () {
-  myAlert(`Sorry, but this is not available yet`, 5000);
-});
-
-// Функция для кнопки "SEE ALL"
-let see_all = doc.querySelectorAll(".see-all");
-for (let item of see_all) {
-  item.addEventListener("click", function () {
-    item.parentElement.nextElementSibling.classList.toggle("flex-justify");
-    if (item.innerHTML.toLocaleLowerCase() == "see all") {
-      item.innerHTML = "close";
-    } else {
-      item.innerHTML = "see all";
-    }
-  });
-}
-
 // Создаю функцию алерт, но свой стиль
 let myAlert = (content, time) => {
   let alert_box = doc.createElement("div");
   alert_box.classList.add("alert");
-  alert_box.style.animationDirection = time + "ms"
+  alert_box.style.animationDuration = time + 10 + "ms";
 
   let alert_content = doc.createElement("p");
   alert_content.classList.add("alert-text");
@@ -497,6 +495,60 @@ let myAlert = (content, time) => {
     alert_box.remove();
   }, time);
 };
+
+// Срочное удаление моего алерта
+let myAlertDelete = () => {
+  let alert_boxes = doc.querySelectorAll(".alert");
+  for (let item of alert_boxes) {
+    setTimeout(() => {
+      item.remove();
+    }, 100);
+  }
+};
+
+// Вытаскиваем текущее время и говорим Доброе утро, день и тд.
+let main_title = doc.querySelector(".main-title");
+let date = new Date();
+let currentHours = date.getHours();
+
+if (currentHours <= 6) {
+  main_title.innerHTML = "Good night";
+} else if (currentHours <= 12 && currentHours > 6) {
+  main_title.innerHTML = "Good morning";
+} else if (currentHours <= 18 && currentHours > 12) {
+  main_title.innerHTML = "Good afternoon";
+} else if (currentHours <= 24 && currentHours > 18) {
+  main_title.innerHTML = "Good evening";
+}
+
+// Меню аккаунта
+let user_acc = doc.querySelector(".user-account");
+let user_menu1 = doc.querySelector(".user-menu-1");
+
+user_acc.addEventListener("click", function () {
+  user_menu1.classList.toggle("hide");
+});
+
+for (let item of [
+  user_acc.firstElementChild,
+  user_acc.firstElementChild.nextElementSibling,
+  user_acc.firstElementChild.nextElementSibling.nextElementSibling,
+]) {
+  item.addEventListener("click", myAlertDelete);
+}
+
+// Функция для кнопки "SEE ALL"
+let see_all = doc.querySelectorAll(".see-all");
+for (let item of see_all) {
+  item.addEventListener("click", function () {
+    item.parentElement.nextElementSibling.classList.toggle("flex-justify");
+    if (item.innerHTML.toLocaleLowerCase() == "see all") {
+      item.innerHTML = "close";
+    } else {
+      item.innerHTML = "see all";
+    }
+  });
+}
 
 // Функция поиска песен внутри плейлиста
 let search_icon = doc.querySelector(".playlist-search");
@@ -598,10 +650,12 @@ setInterval(() => {
 
 // Функция рандомного HEX цвета
 let layer = doc.querySelector(".main-layer");
-let randomColor;
+let getRandomBg = () => {
+  let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  return randomColor;
+};
 let setRandomBg = () => {
-  randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  layer.style.backgroundImage = `linear-gradient(to bottom, #${randomColor}, transparent)`;
+  layer.style.backgroundImage = `linear-gradient(to bottom, #${getRandomBg()}, transparent)`;
 };
 
 // Функция удаления детей tbody в HTML
@@ -615,32 +669,88 @@ let tbodyDelFunc = () => {
 // Регистр и вход
 let form1 = doc.querySelectorAll(".signup-inp-wrap")[0];
 let form2 = doc.querySelectorAll(".signup-inp-wrap")[1];
+let form3 = doc.querySelectorAll(".signup-inp-wrap")[2];
 let btn1 = doc.querySelector(".signup-btn");
 let btn2 = doc.querySelector(".login-btn");
+let preview_img = doc.querySelectorAll(".preview-img")[0];
+
+preview_img.addEventListener("click", function () {
+  form1.firstElementChild.lastElementChild.click();
+});
+
+form1.firstElementChild.lastElementChild.addEventListener(
+  "change",
+  function () {
+    form1.firstElementChild.firstElementChild.innerHTML = "Image uploaded";
+
+    let reader = new FileReader();
+    reader.readAsDataURL(form1.firstElementChild.lastElementChild.files[0]);
+    reader.onload = () => {
+      preview_img.src = reader.result;
+    };
+  }
+);
 
 form1.addEventListener("submit", function (event) {
   event.preventDefault();
-  console.log(form1);
 
-  fetch(`http://localhost:3300/users?username=${form1.firstElementChild.value}`)
+  fetch(
+    `http://localhost:3300/users?username=${form1.firstElementChild.nextElementSibling.value.toLocaleLowerCase()}`
+  )
     .then((res) => res.json())
     .then((data) => {
       if (data.length == 0) {
+        myAlert("You created your account!", 3000);
+        let mainID = Math.floor(Math.random() * 1000000);
         let userObj = {
-          username: form1.firstElementChild.nextElementSibling.value,
-          password: form1.firstElementChild.nextElementSibling.nextElementSibling.value,
-          email: form1.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.value,
-          img: '',
-          id: Math.floor(Math.random() * 1000000)
+          username:
+            form1.firstElementChild.nextElementSibling.value.toLocaleLowerCase(),
+          password:
+            form1.firstElementChild.nextElementSibling.nextElementSibling.value,
+          email:
+            form1.firstElementChild.nextElementSibling.nextElementSibling
+              .nextElementSibling.value,
+          img: "",
+          id: mainID,
+        };
+        if (form1.firstElementChild.lastElementChild.files[0]) {
+          userObj.img = preview_img.getAttribute("src");
+        } else {
+          userObj.img = "./Images/profile-icon.png";
         }
-        if (form1.firstElementChild.value == "") {
-          userObj.img = "./Images/profile-icon.png"
-        } else userObj.img = form1.firstElementChild.value
 
-        axios.post('http://localhost:3300/users', userObj)
-        axios.post('http://localhost:3300/active-user', userObj)
-        
-      } else myAlert("Sorry, but this username already exists", 5000)
+        axios.put("http://localhost:3300/active-user", { id: userObj.id });
+        axios.post("http://localhost:3300/users", userObj);
+
+        setTimeout(getActiveUser, 100);
+        form1.parentElement.parentElement.classList.add("hide");
+        form2.parentElement.parentElement.classList.add("hide");
+        form3.parentElement.parentElement.classList.add("hide");
+      } else myAlert("Sorry, but this username already exists", 5000);
+    });
+});
+
+form2.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  fetch(
+    `http://localhost:3300/users?username=${form2.firstElementChild.value.toLocaleLowerCase()}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.length != 0) {
+        if (
+          form2.firstElementChild.nextElementSibling.value == data[0].password
+        ) {
+          myAlert("You logged in!", 3000);
+          axios.put("http://localhost:3300/active-user", { id: data[0].id });
+
+          setTimeout(getActiveUser, 100);
+          form1.parentElement.parentElement.classList.add("hide");
+          form2.parentElement.parentElement.classList.add("hide");
+          form3.parentElement.parentElement.classList.add("hide");
+        } else myAlert(`Sorry, but password is wrong`, 5000);
+      } else myAlert(`Sorry, but this username doesn't exists`, 5000);
     });
 });
 
@@ -655,17 +765,173 @@ document.addEventListener("keydown", function (event) {
   if (event.code == "Escape") {
     form1.parentElement.parentElement.classList.add("hide");
     form2.parentElement.parentElement.classList.add("hide");
+    form3.parentElement.parentElement.classList.add("hide");
   }
 });
 
-// Получаю активного пользователя
-let userName
+// Слова песни
+// let artistName = "INTERWORLD";
+// let trackName = "METAMORPHOSIS";
 
-// Функция get запрос в Spotify API
+// $.ajax({
+//   type: "GET",
+//   data: {
+//       apikey: "",
+//       q_artist: artistName,
+//       q_track: trackName,
+//       format: "jsonp",
+//       callback: "jsonp_callback"
+//   },
+//   url: "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get",
+//   dataType: "jsonp",
+//   jsonpCallback: 'jsonp_callback',
+//   contentType: 'application/json',
+//   success: function (data) {
+//     console.log(data);
+//   }
+// })
+
+// Получаю активного пользователя
+let getActiveUser = () => {
+  let btn_wrap = doc.querySelector(".btn-wrapper");
+  let username = doc.querySelector(".profile-name");
+  let profile_img = doc.querySelector(".profile-icon");
+
+  fetch("http://localhost:3300/active-user")
+    .then((res) => res.json())
+    .then((db) => {
+      if (db.id != (null && undefined)) {
+        fetch(`http://localhost:3300/users/${db.id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            user_acc.classList.remove("hide");
+            btn_wrap.classList.add("hide");
+
+            username.innerHTML = data.username;
+            profile_img.src = data.img;
+          });
+      } else {
+        user_acc.classList.add("hide");
+        btn_wrap.classList.remove("hide");
+
+        username.innerHTML = "You";
+        profile_img.src = "./Images/profile-icon.png";
+      }
+    });
+};
+setTimeout(getActiveUser, 100);
+
+// Выход из аккаунта
+let logout_btn = doc.querySelector(".logout-btn");
+logout_btn.addEventListener("click", function () {
+  myAlert(`You logged out successfully!`, 3000);
+  axios.put("http://localhost:3300/active-user", {});
+  setTimeout(getActiveUser, 100);
+  form1.parentElement.parentElement.classList.add("hide");
+  form2.parentElement.parentElement.classList.add("hide");
+  form3.parentElement.parentElement.classList.add("hide");
+});
+
+// Изменение аккаунта
+let profile_btn = doc.querySelector(".profile-btn");
+
+profile_btn.addEventListener("click", function () {
+  myAlertDelete();
+
+  form3.parentElement.parentElement.classList.toggle("hide");
+
+  fetch("http://localhost:3300/active-user")
+    .then((res) => res.json())
+    .then((db) => {
+      fetch(`http://localhost:3300/users/${db.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          form3.previousElementSibling.src = data.img;
+          form3.firstElementChild.nextElementSibling.value = data.username;
+          form3.firstElementChild.nextElementSibling.nextElementSibling.value =
+            data.password;
+          form3.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.value =
+            data.email;
+        });
+    });
+});
+
+form3.firstElementChild.lastElementChild.addEventListener(
+  "change",
+  function () {
+    form3.firstElementChild.firstElementChild.innerHTML = "Image updated";
+
+    let reader = new FileReader();
+    reader.readAsDataURL(form3.firstElementChild.lastElementChild.files[0]);
+    reader.onload = () => {
+      form3.previousElementSibling.src = reader.result;
+    };
+  }
+);
+
+form3.previousElementSibling.addEventListener("click", function () {
+  form3.firstElementChild.lastElementChild.click();
+});
+
+form3.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  fetch(
+    `http://localhost:3300/users?username=${form3.firstElementChild.nextElementSibling.value.toLocaleLowerCase()}`
+  )
+    .then((res) => res.json())
+    .then((db) => {
+      fetch(`http://localhost:3300/active-user`)
+        .then((res) => res.json())
+        .then((database) => {
+          if (db.length == 0 || db[0].id == database.id) {
+            myAlert("Your account was changed successfully!", 3000);
+
+            let putObj = {
+              username:
+                form3.firstElementChild.nextElementSibling.value.toLocaleLowerCase(),
+              password:
+                form3.firstElementChild.nextElementSibling.nextElementSibling
+                  .value,
+              email:
+                form3.firstElementChild.nextElementSibling.nextElementSibling
+                  .nextElementSibling.value,
+              img: form3.previousElementSibling.src,
+              id: database.id,
+            };
+            axios.put(`http://localhost:3300/users/${database.id}`, putObj);
+
+            setTimeout(getActiveUser, 100);
+            form1.parentElement.parentElement.classList.add("hide");
+            form2.parentElement.parentElement.classList.add("hide");
+            form3.parentElement.parentElement.classList.add("hide");
+          } else myAlert("Sorry, but this username already exists", 5000);
+        });
+    });
+});
+
+form3.lastElementChild.lastElementChild.addEventListener("click", function () {
+  fetch("http://localhost:3300/active-user")
+    .then((res) => res.json())
+    .then((data) => {
+      myAlert("Your account was deleted successfully!", 3000);
+
+      axios.put(`http://localhost:3300/active-user`, {});
+      axios.delete(`http://localhost:3300/users/${data.id}`);
+
+      setTimeout(getActiveUser, 100);
+      form1.parentElement.parentElement.classList.add("hide");
+      form2.parentElement.parentElement.classList.add("hide");
+      form3.parentElement.parentElement.classList.add("hide");
+    });
+});
+
+// Функция GET запрос в Spotify API
 getToken().then(function (result) {
   const accessToken = result;
   let mainContent = doc.querySelector(".main-content");
   let playlistSection = doc.querySelector(".playlist-section");
+  let searchSection = doc.querySelector(".search-section");
   let mixWrap = doc.querySelector(".mixes-wrap");
   let prevBtn = doc.querySelector(".prev");
   let nextBtn = doc.querySelector(".next");
@@ -680,6 +946,11 @@ getToken().then(function (result) {
   let playlistMoreInfo = doc.querySelector(".more-info");
   let playlistPlaygreen = doc.querySelector(".playlist-inp");
   let heart = doc.querySelector(".heart");
+  let main_search = doc.querySelector(".main-search-inp");
+  let header_search = doc.querySelector(".main-search");
+  let category_wrap = doc.querySelector(".browse-wrap");
+  let search_btn = doc.querySelector(".search-tap");
+  let pages = [mainContent, playlistSection, searchSection];
   let sendArr = [];
   let favourArr = [];
 
@@ -688,8 +959,6 @@ getToken().then(function (result) {
     let song_index = 0;
     let playGreenFunc = () => {
       if (playGreen.checked) {
-        hrefs.push(data.href);
-
         if (data.items[song_index].track.preview_url != (null || undefined)) {
           audio.src = data.items[song_index].track.preview_url;
         } else audio.src = "./Audios/voxworker-voice-file.mp3";
@@ -747,16 +1016,20 @@ getToken().then(function (result) {
           fetch("http://localhost:3300/liked-songs")
             .then((res) => res.json())
             .then((db) => {
-              for (let item of db) {
-                if (
-                  db.length != 0 &&
-                  item.id == data.items[song_index].track.id
-                ) {
-                  favoursArray.push(item.id);
-                } else {
-                  axios.delete(`http://localhost:3300/liked-songs/${item.id}`);
+              setTimeout(() => {
+                for (let item of db) {
+                  if (
+                    db.length != 0 &&
+                    item.id == data.items[song_index].track.id
+                  ) {
+                    favoursArray.push(item.id);
+                  } else {
+                    axios.delete(
+                      `http://localhost:3300/liked-songs/${item.id}`
+                    );
+                  }
                 }
-              }
+              }, 200);
               setTimeout(() => {
                 if (
                   favoursArray[favoursArray.length - 1] ==
@@ -767,15 +1040,15 @@ getToken().then(function (result) {
                   heart.setAttribute("src", "./Images/heart.png");
                 }
               }, 200);
-              console.log(favoursArray[favoursArray.length - 1]);
-              console.log(data.items[song_index].track.id);
             });
           let lightFunc = () => {
-            if (heart.getAttribute("src") == "./Images/heartfill.png") {
-              localStorage.removeItem("favourArr");
-              favourArr.push(favourObj);
-              localStorage.setItem("favourArr", JSON.stringify(favourArr));
-            }
+            setTimeout(() => {
+              if (heart.getAttribute("src") == "./Images/heartfill.png") {
+                localStorage.removeItem("favourArr");
+                favourArr.push(favourObj);
+                localStorage.setItem("favourArr", JSON.stringify(favourArr));
+              }
+            }, 100);
           };
           lightFunc();
           audio.addEventListener("ended", lightFunc);
@@ -925,19 +1198,21 @@ getToken().then(function (result) {
 
       let favourite_checker = doc.createElement("th");
       favourite_checker.classList.add("favourite");
-      fetch("http://localhost:3300/liked-songs")
-        .then((res) => res.json())
-        .then((database) => {
-          if (database.length != 0) {
-            for (let item2 of database) {
-              if (item2.id == item.id) {
-                let favourite_img = doc.createElement("img");
-                favourite_img.setAttribute("src", "./Images/heartfill.png");
-                favourite_checker.appendChild(favourite_img);
+      setTimeout(() => {
+        fetch("http://localhost:3300/liked-songs")
+          .then((res) => res.json())
+          .then((database) => {
+            if (database.length != 0) {
+              for (let item2 of database) {
+                if (item2.id == item.id) {
+                  let favourite_img = doc.createElement("img");
+                  favourite_img.setAttribute("src", "./Images/heartfill.png");
+                  favourite_checker.appendChild(favourite_img);
+                }
               }
             }
-          }
-        });
+          });
+      }, 100);
       tr.appendChild(favourite_checker);
 
       let song_duration = doc.createElement("th");
@@ -1056,7 +1331,7 @@ getToken().then(function (result) {
   };
 
   // Создаю первые 6 элементов через цикл на свой HTML
-  fetch("https://api.spotify.com/v1/browse/categories", {
+  fetch("https://api.spotify.com/v1/browse/categories?limit=50", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -1196,31 +1471,285 @@ getToken().then(function (result) {
       mixGetRequest(wrap2, 6);
       mixGetRequest(wrap4, 4);
       mixGetRequest(wrap6, 0);
+
+      // Функция кнопки "домой"
+      let homepage_btn = doc.querySelector(".homepage");
+      let homepageFunc = () => {
+        if (contains(mainContent.classList, "hide")) {
+          mainContent.classList.remove("hide");
+          header_search.classList.add("hide");
+
+          let arrowObj = {
+            addHide: [mainContent],
+            removeHide: [],
+          };
+
+          for (let item of pages) {
+            if (item != mainContent) {
+              if (!contains(item.classList, "hide")) {
+                item.classList.add("hide");
+                if (item == searchSection) {
+                  arrowObj.removeHide.push(header_search);
+                }
+                arrowObj.removeHide.push(item);
+              }
+            }
+          }
+
+          backArray.push(arrowObj);
+        }
+      };
+      homepage_btn.addEventListener("click", homepageFunc);
+
+      let clickArrow = () => {
+        setTimeout(() => {
+          if (!contains(mainContent.classList, "hide")) {
+            homepage_btn.firstElementChild.click();
+          } else if (!contains(searchSection.classList, "hide")) {
+            search_btn.firstElementChild.click();
+          }
+        }, 100);
+      };
+      backArrow.addEventListener("click", clickArrow);
+      forthArrow.addEventListener("click", clickArrow);
+
+      // Засовываем категории в поиск
+      search_btn.addEventListener("click", function () {
+        searchSection.classList.remove("hide");
+        header_search.classList.remove("hide");
+
+        let arrowObj = {
+          addHide: [header_search, searchSection],
+          removeHide: [],
+        };
+
+        for (let item of pages) {
+          if (item != searchSection) {
+            if (!contains(item.classList, "hide")) {
+              item.classList.add("hide");
+              arrowObj.removeHide.push(item);
+            }
+          }
+        }
+
+        backArray.push(arrowObj);
+
+        if (category_wrap.children.length == 0) {
+          for (let item of res.categories.items) {
+            let browse_item = doc.createElement("div");
+            browse_item.classList.add("browse-item");
+            setTimeout(() => {
+              browse_item.style.backgroundColor = `#${getRandomBg()}`;
+            }, 200);
+
+            let browse_name = doc.createElement("h3");
+            browse_name.classList.add("browse-name");
+            browse_name.innerHTML = item.name;
+            browse_item.appendChild(browse_name);
+
+            let browse_img = doc.createElement("img");
+            browse_img.classList.add("browse-img");
+            browse_img.src = item.icons[0].url;
+            browse_item.appendChild(browse_img);
+
+            category_wrap.appendChild(browse_item);
+          }
+        }
+      });
+
+      // Поиск песен в Spotify API
+      let artist_result = doc.querySelector(".artist-result");
+      let album_result = doc.querySelector(".album-result");
+      let playlist_result = doc.querySelector(".playlist-result");
+      let track_result = doc.querySelector(".track-result");
+
+      let mainSearchSystem = () => {
+        if (main_search.value != "") {
+          searchSection.firstElementChild.classList.remove("hide");
+          searchSection.lastElementChild.classList.add("hide");
+
+          fetch(
+            `https://api.spotify.com/v1/search?q=${main_search.value}&type=album,artist,playlist,track&limit=20&offset=0`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + accessToken,
+              },
+            }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              // Создаём элементы поиска с помощью уникальной функции
+              let createFunc = (database, wrap, classGive) => {
+                for (let item of doc.querySelectorAll(`.${classGive}`)) {
+                  item.remove()
+                }
+                console.log(database);
+                let hrefs = [];
+                for (let item of database) {
+                  if (item != (null && undefined)) {
+                    wrap.parentElement.classList.remove('hide')
+                    let playItem = doc.createElement("div");
+                    playItem.classList.add("play-item");
+                    playItem.classList.add(classGive)
+
+                    let playImgBox = doc.createElement("div");
+                    playImgBox.classList.add("play-img");
+                    playItem.appendChild(playImgBox);
+
+                    let playImg = doc.createElement("img");
+                    if (database != data.tracks.items) {
+                      if (item != (null && undefined)) {
+                        playImg.src = item.images[0].url;
+                      } else playImg.src = "../Images/example-mix.png"
+                    } else {
+                      if (item != (null && undefined)) {
+                        playImg.src = item.album.images[0].url;
+                      } else playImg.src = "../Images/example-mix.png"
+                    }
+                    playImgBox.appendChild(playImg);
+
+                    let playMixgreen = doc.createElement("input");
+                    playMixgreen.setAttribute("type", "radio");
+                    playMixgreen.setAttribute("name", "playgreen");
+                    playMixgreen.classList.add("play-mixgreen");
+                    playImgBox.appendChild(playMixgreen);
+
+                    let playName = doc.createElement("h3");
+                    playName.classList.add("play-name");
+                    playName.innerHTML = item.name;
+                    playItem.appendChild(playName);
+
+                    let playArtist = doc.createElement("h3");
+                    playArtist.classList.add("play-artist");
+                    if (
+                      database == data.albums.items ||
+                      database == data.tracks.items
+                    ) {
+                      for (let item2 of item.artists) {
+                        playArtist.innerHTML += `, <a>${item2.name}</a>`;
+                      }
+                    } else if (database == data.playlists.items) {
+                      playArtist.innerHTML = item.owner.display_name;
+                    } else if (database == data.artists.items) {
+                      for (let item2 of item.genres) {
+                        playArtist.innerHTML = `, <a>${item2}</a>`;
+                      }
+                    }
+                    playArtist.innerHTML = playArtist.innerHTML.replace(
+                      /\,/,
+                      ""
+                    );
+                    playItem.appendChild(playArtist);
+
+                    wrap.appendChild(playItem);
+
+                    if (
+                      database != data.tracks.items &&
+                      database != data.artists.items
+                    ) {
+                      fetch(`${item.href}/tracks`, {
+                        method: "GET",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: "Bearer " + accessToken,
+                        },
+                      })
+                        .then((res) => res.json())
+                        .then((db) => {
+                          playlistPlayFunc(
+                            item,
+                            db,
+                            hrefs,
+                            playMixgreen,
+                            playName
+                          );
+                        });
+                    } else if (database == data.tracks.items) {
+                      let trackPlayFunc = () => {
+                        if (item.preview_url != (null || undefined)) {
+                          audio.src = item.preview_url;
+                        } else audio.src = "./Audios/voxworker-voice-file.mp3";
+
+                        songTitle.innerHTML = `<a>${playName.innerHTML}</a>`;
+                        songAuthor.innerHTML = playArtist.innerHTML;
+                        songImg.src = playImg.getAttribute("src");
+
+                        play.click();
+                        if (play.getAttribute("src") == "./Images/stop.png") {
+                          audio.pause();
+                          playMixgreen.checked = false;
+                          play.setAttribute("src", "./Images/play.png");
+                        } else {
+                          playMixgreen.checked = true;
+                        }
+                      };
+                      playMixgreen.addEventListener("click", trackPlayFunc);
+                    }
+                  } else {
+                    wrap.parentElement.classList.add('hide')
+                  }
+                }
+              };
+              createFunc(data.albums.items, album_result.lastElementChild, "album_item");
+              createFunc(
+                data.playlists.items,
+                playlist_result.lastElementChild,
+                "playlist_item"
+              );
+              createFunc(data.tracks.items, track_result.lastElementChild, "track_item");
+              createFunc(data.artists.items, artist_result.lastElementChild, "artist_item");
+            });
+        } else {
+          main_search.focus();
+          searchSection.firstElementChild.classList.add("hide");
+          searchSection.lastElementChild.classList.remove("hide");
+        }
+      };
+      main_search.previousElementSibling.addEventListener(
+        "click",
+        mainSearchSystem
+      );
+      main_search.addEventListener("click", function () {
+        setTimeout(() => {
+          mainSearchSystem();
+        }, 100);
+      });
+      main_search.addEventListener("keydown", function (event) {
+        if (event.code == "Enter") {
+          mainSearchSystem();
+        }
+      });
     });
 
   // Получаем с localStorage прослушанные пользователем песни чтобы закинуть их в localhost
   let sendItems = JSON.parse(localStorage.getItem("sendArr"));
-  if (
-    localStorage.getItem("sendArr") != (null && undefined) &&
-    sendItems.length != 0
-  ) {
-    for (let item of sendItems) {
-      axios.post("http://localhost:3300/recently-played", item);
+  setTimeout(() => {
+    if (
+      localStorage.getItem("sendArr") != (null && undefined) &&
+      sendItems.length != 0
+    ) {
+      for (let item of sendItems) {
+        axios.post("http://localhost:3300/recently-played", item);
+      }
+      localStorage.removeItem("sendArr");
     }
-    localStorage.removeItem("sendArr");
-  }
+  }, 100);
 
   // Получаем с localStorage любимые песни чтобы закинуть их в localhost
   let favours = JSON.parse(localStorage.getItem("favourArr"));
-  if (
-    localStorage.getItem("favourArr") != (null && undefined) &&
-    favours.length != 0
-  ) {
-    for (let item of favours) {
-      axios.post("http://localhost:3300/liked-songs", item);
+  setTimeout(() => {
+    if (
+      localStorage.getItem("favourArr") != (null && undefined) &&
+      favours.length != 0
+    ) {
+      for (let item of favours) {
+        axios.post("http://localhost:3300/liked-songs", item);
+      }
+      localStorage.removeItem("favourArr");
     }
-    localStorage.removeItem("favourArr");
-  }
+  }, 100);
 
   // Получаем недавно прослушанные песни с localhost
   let wrap3 = doc.querySelector(".wrap-3");
@@ -1340,7 +1869,6 @@ getToken().then(function (result) {
           })
             .then((res) => res.json())
             .then((db) => {
-              console.log(song_index);
               if (playlistPlaygreen.checked) {
                 songImg.src = db.album.images[0].url;
                 songTitle.innerHTML = `<a>${db.name}</a>`;
@@ -1404,7 +1932,7 @@ getToken().then(function (result) {
 
               let tr = doc.createElement("tr");
               tr.classList.add("playlist-tr");
-              if (i == 1) {
+              if (ind == 1) {
                 tr.classList.add("top-tr");
               } else tr.classList.add("normal-tr");
 
@@ -1595,3 +2123,4 @@ getToken().then(function (result) {
   };
   favor.addEventListener("click", favorSongFunc);
 });
+AOS.init();
