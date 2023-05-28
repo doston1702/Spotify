@@ -1,19 +1,22 @@
 let doc = document;
 
 // Spotify API post запрос для получения токена
-let clientIdTokens = [
-  "343a57134ca84bbfad33b93ac6c9d375",
-  "780552beb61849d496f159c841f77834",
-  "8ce7eaf0329446ffa0bc238e7a2f8d45",
-];
-let clientSecretTokens = [
-  "4255e9967e5747349fb117ed89edca8a",
-  "35cb6644ccba42b1805f8444b198bed7",
-  "e9f4a9a3eba848ad974b38a0e252523a",
-];
+let clientTokens = {
+  clientIdTokens: [
+    "343a57134ca84bbfad33b93ac6c9d375",
+    "780552beb61849d496f159c841f77834",
+    "8ce7eaf0329446ffa0bc238e7a2f8d45",
+  ],
+  clientSecretTokens: [
+    "4255e9967e5747349fb117ed89edca8a",
+    "35cb6644ccba42b1805f8444b198bed7",
+    "e9f4a9a3eba848ad974b38a0e252523a",
+  ],
+};
+let clientNumbers = 0
 
-const clientId = clientIdTokens[2];
-const clientSecret = clientSecretTokens[2];
+const clientId = clientTokens.clientIdTokens[clientNumbers];
+const clientSecret = clientTokens.clientSecretTokens[clientNumbers];
 
 const getToken = async () => {
   const result = await fetch("https://accounts.spotify.com/api/token", {
@@ -1583,16 +1586,16 @@ getToken().then(function (result) {
               // Создаём элементы поиска с помощью уникальной функции
               let createFunc = (database, wrap, classGive) => {
                 for (let item of doc.querySelectorAll(`.${classGive}`)) {
-                  item.remove()
+                  item.remove();
                 }
                 console.log(database);
                 let hrefs = [];
                 for (let item of database) {
                   if (item != (null && undefined)) {
-                    wrap.parentElement.classList.remove('hide')
+                    wrap.parentElement.classList.remove("hide");
                     let playItem = doc.createElement("div");
                     playItem.classList.add("play-item");
-                    playItem.classList.add(classGive)
+                    playItem.classList.add(classGive);
 
                     let playImgBox = doc.createElement("div");
                     playImgBox.classList.add("play-img");
@@ -1602,11 +1605,11 @@ getToken().then(function (result) {
                     if (database != data.tracks.items) {
                       if (item != (null && undefined)) {
                         playImg.src = item.images[0].url;
-                      } else playImg.src = "../Images/example-mix.png"
+                      } else playImg.src = "../Images/example-mix.png";
                     } else {
                       if (item != (null && undefined)) {
                         playImg.src = item.album.images[0].url;
-                      } else playImg.src = "../Images/example-mix.png"
+                      } else playImg.src = "../Images/example-mix.png";
                     }
                     playImgBox.appendChild(playImg);
 
@@ -1688,18 +1691,30 @@ getToken().then(function (result) {
                       playMixgreen.addEventListener("click", trackPlayFunc);
                     }
                   } else {
-                    wrap.parentElement.classList.add('hide')
+                    wrap.parentElement.classList.add("hide");
                   }
                 }
               };
-              createFunc(data.albums.items, album_result.lastElementChild, "album_item");
+              createFunc(
+                data.albums.items,
+                album_result.lastElementChild,
+                "album_item"
+              );
               createFunc(
                 data.playlists.items,
                 playlist_result.lastElementChild,
                 "playlist_item"
               );
-              createFunc(data.tracks.items, track_result.lastElementChild, "track_item");
-              createFunc(data.artists.items, artist_result.lastElementChild, "artist_item");
+              createFunc(
+                data.tracks.items,
+                track_result.lastElementChild,
+                "track_item"
+              );
+              createFunc(
+                data.artists.items,
+                artist_result.lastElementChild,
+                "artist_item"
+              );
             });
         } else {
           main_search.focus();
